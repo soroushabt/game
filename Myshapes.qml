@@ -1,21 +1,7 @@
 import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Layouts
 import QtQuick.Shapes
-
-
-Shape {
-    anchors.centerIn: parent
-    ShapePath
-    {
-        strokeWidth: 3
-        strokeColor: "red"
-//        fillColor: "lightGray"
-        startX: 0; startY: 0
-        PathLine
-        {
-            x: 0
-            y: 0
-        }
-    }
-}
-
-
+import Viewmodels 1.0
+import Shapegenrators 1.0

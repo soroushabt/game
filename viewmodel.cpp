@@ -1,13 +1,15 @@
 
 #include "viewmodel.h"
 #include <iostream>
+#include <Shapes.h>
 
-viewmodel::viewmodel()
+viewmodel::viewmodel(Shapes* helix)
     :m_lvlgame(0)
+    ,m_helix(helix)
+
 {
 
 }
-
 
 int viewmodel::lvlgame() const
 {
@@ -22,7 +24,18 @@ void viewmodel::setLvlgame(int newLvlgame)
     emit lvlgameChanged();
 }
 
-void viewmodel::test()
+
+Shapes *viewmodel::snake() const
 {
-    std::cerr << m_lvlgame << std::endl;
+    return m_helix;
+}
+
+void viewmodel::setSnake(Shapes *newHelix)
+{
+    m_helix = newHelix;
+}
+
+bool viewmodel::isonline(double xmouse, double ymouse)
+{
+    return m_helix->isonline(xmouse,ymouse);
 }

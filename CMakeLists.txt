@@ -14,15 +14,16 @@ qt_standard_project_setup()
 
 qt_add_executable(appGame
     main.cpp
-    Shapegenrator.h Shapegenrator.cpp
+    Shapegenerator.h Shapegenerator.cpp
     viewmodel.h viewmodel.cpp
+    Shapes.h Shapes.cpp
 )
 
 qt_add_qml_module(appGame
     URI Game
     VERSION 1.0
     QML_FILES Main.qml
-    QML_FILES Myshapes.qml
+#    QML_FILES Myshapes.qml
 
 
 )

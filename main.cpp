@@ -2,7 +2,8 @@
 #include <QQmlApplicationEngine>
 #include "viewmodel.h"
 #include<QQmlContext>
-#include "Shapegenrator.h"
+#include "Shapes.h"
+#include"Shapegenerator.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,15 +14,17 @@ int main(int argc, char *argv[])
 //    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
 //        &app, []() { QCoreApplication::exit(-1); },
 //        Qt::QueuedConnection);
-    viewmodel v;
-    Shapegenrator s;
+
+    Shapegenerator* mainshape = new Shapegenerator();
+    Shapes* helix = new Shapes(mainshape);
+    viewmodel v(helix);
+
     engine.rootContext()->setContextProperty("mainviewmodel", &v);
     qmlRegisterUncreatableType<viewmodel>("Viewmodels", 1 , 0 , "Viewmodel" , "error .... form qml register of viewmodels");
 
+    engine.rootContext()->setContextProperty("Shapgenratorcontext", mainshape);
+    qmlRegisterUncreatableType<Shapegenerator>("Shapegenerators", 1 , 0 , "Shapegenerator" , "error .... form qml register of Shapegenerators");
 
-    qRegisterMetaType<QMap<int,int>>("QMap<int,int>");
-    engine.rootContext()->setContextProperty("shapegenratorcontext", &s);
-    qmlRegisterUncreatableType<Shapegenrator>("Shapegenrators", 1 , 0 , "Shapegenrator" , "error .... form qml register of Shapegenrators");
 
 
 
