@@ -5,11 +5,11 @@
 #include<QObject>
 #include<QVector>
 
-enum class levelgame
-{
-    easy,
-    hard
-};
+//enum class levelgame
+//{
+//    easy,
+//    hard
+//};
 
 class Shapegenerator : public QObject
 {
@@ -19,7 +19,7 @@ public:
     Shapegenerator();
     QVector<int> xy() const;
     void setxy(const QVector<int> &newXy);
-    Q_INVOKABLE QVector<int> makeline(levelgame a);
+    Q_INVOKABLE QVector<int> makeline();
 signals:
     void xyChanged();
 private:

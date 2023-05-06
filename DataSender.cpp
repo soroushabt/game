@@ -1,0 +1,69 @@
+
+#include "DataSender.h"
+#include <iostream>
+
+DataSender::DataSender(QTcpSocket *tcpSocket , std::shared_ptr<Shapes> myshape )
+    : m_tcpSocket(tcpSocket)
+    , m_shape(myshape)
+{
+    setCurrentStatus("red");
+    QObject::connect(m_tcpSocket, &QTcpSocket::connected, this, &DataSender::handleConnected);
+}
+
+void DataSender::send(QString time)
+{
+    auto distances = m_shape->mindist();
+//    m_tcpSocket->write(data.toLocal8Bit());
+}
+
+void DataSender::sendname()
+{
+
+}
+
+void DataSender::connect()
+{
+    while (!m_isConnected) {
+        setCurrentStatus("yellow");
+        m_tcpSocket->connectToHost("127.0.0.1", 2000);
+        std::cerr << "connecting" << std::endl;
+        std::cerr << m_isConnected << std::endl;
+        m_tcpSocket->waitForConnected();
+    }
+}
+
+void DataSender::handleConnected()
+{
+    std::cerr << "connected" << std::endl;
+    setCurrentStatus("green");
+    setIsConnected(true);
+}
+
+QString DataSender::name() const
+{
+    return m_name;
+}
+
+bool DataSender::isConnected() const
+{
+    return m_isConnected;
+}
+
+void DataSender::setIsConnected(bool newIsConnected)
+{
+    m_isConnected = newIsConnected;
+}
+
+
+QString DataSender::currentStatus() const
+{
+    return m_currentStatus;
+}
+
+void DataSender::setCurrentStatus(const QString &newCurrentStatus)
+{
+    if (m_currentStatus == newCurrentStatus)
+        return;
+    m_currentStatus = newCurrentStatus;
+    emit currentStatusChanged();
+}

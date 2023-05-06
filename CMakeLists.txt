@@ -15,6 +15,7 @@ qt_standard_project_setup()
 qt_add_executable(appGame
     main.cpp
     Shapegenerator.h Shapegenerator.cpp
+    DataSender.h DataSender.cpp
     viewmodel.h viewmodel.cpp
     Shapes.h Shapes.cpp
 )

@@ -8,10 +8,20 @@ import Shapegenerators 1.0
 
 
 Window {
+
     property Viewmodel mymodel: mainviewmodel
     property Shapegenerator shapeone: Shapgenratorcontext
-    property bool checkit: false
 
+    Button
+    {
+        anchors.centerIn: parent
+        text: "click"
+        onClicked:
+        {
+            console.log(mymodel.myname)
+
+        }
+    }
 
     function createPathLineElements(shapePath)
     {
@@ -26,60 +36,141 @@ Window {
                                               shapePath);
             var PathArc = Qt.createQmlObject('import QtQuick 2.15; PathArc {}',
                                              shapePath);
-            if(combo.currentIndex===0)
-            {
-                pathLine.x = shapeone.xy[2*i]
-                pathLine.y = shapeone.xy[2*i+1]
-                pathElements.push(pathLine)
-            }
-            //                    else if(combo.currentIndex===1)
-            //                    {
-            //                        if(i<=7)
-            //                        {
-            //                            pathLine.x = shapeone.numbers[(2*i)]
-            //                            pathLine.y = shapeone.numbers[2*i+1]
-            //                        }
-            //                        else
-            //                        {
-            //                            PathArc.x = shapeone.numbers[2*i]
-            //                            PathArc.y = shapeone.numbers[2*i+1]
-            //                        }
 
-            //                    if(mousearea.mouseX>shapeone.numbers[2*i])
-            //                    {
+            pathLine.x = shapeone.xy[2*i]
+            pathLine.y = shapeone.xy[2*i+1]
 
-            //                    }
             pathElements.push(pathLine)
         }
 
         return pathElements
     }
 
-    minimumWidth: 1100
+    id:root
+    minimumWidth: 1150
     minimumHeight: 500
-    maximumWidth: 1100
+    maximumWidth: 1150
     maximumHeight: 500
     visible: true
     title: qsTr("Soroush Game")
-    color: "#ECEDEE"
+    color: "#CACACA"
+
+    RoundButton
+    {
+        id: startkey
+        enabled:
+        {
+            if(mymodel.currentstauts==="green")
+                return true
+            else
+                return false
+        }
+
+        height: 50
+        width: 50
+        radius: 50
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: 280
+        anchors.leftMargin: 2
+        z:10
+
+        background: Rectangle{
+            color:
+            {
+                if(enabled)
+                    return "green"
+                else
+                    return "gray"
+            }
+
+            radius: startkey.radius
+
+        }
+        contentItem: Text {
+            text: "start"
+            color: "white"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        onClicked:
+        {
+
+            shapeone.makeline()
+            console.log("start" , shapeone.xy)
+            myPath.pathElements = createPathLineElements(myPath)
+            shapecontainer.visible = true
+            combo.enabled = false
+            mymodel.sendname()
+        }
+    }
+
+    RoundButton
+    {
+        id: endkey
+        visible: true
+        height: 50
+        width: 50
+        radius: 50
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 280
+        anchors.rightMargin: 3
+        z:1
+
+        background: Rectangle{
+            color: "#00A1F2"
+            radius: endkey.radius
+
+        }
+        contentItem: Text {
+            text: "end"
+            color: "white"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+
+
+        }
+
+    }
+
+    ColumnLayout
+    {
+        id:socketstatus
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.leftMargin: 20
+        anchors.topMargin: 40
+
+        RoundButton
+        {
+            height: 2
+            width:  2
+            radius: 50
+            background: Rectangle{
+                color: mymodel.currentstauts
+                radius: startkey.radius
+            }
+        }
+    }
+
 
 
     Item{
         id: maincontainer
-        width: parent.width-50
-        height: parent.height -50
+        width: parent.width-100
+        height: parent.height
         anchors.centerIn: parent
-        //        PaddedRectangle: 10
 
         Rectangle
         {
-
             id: clientdata
             anchors.top: maincontainer.top
             height: 100
             width: maincontainer.width
             border.width: 0
-            color: "#C9E7FB"
+            color: "#136597"
 
             RowLayout{
                 anchors.centerIn: parent
@@ -87,6 +178,10 @@ Window {
                 TextField{
 
                     placeholderText: "name"
+                    onTextChanged:
+                    {
+                        mymodel.myname = text
+                    }
                 }
                 TextField{
                     placeholderText: "family"
@@ -98,58 +193,29 @@ Window {
                     model: ["easy","hard"]
                     onCurrentIndexChanged:
                     {
-                        mymodel.lvlgame = currentIndex
+                        if(combo.currentIndex===0)
+                            myPath.strokeWidth=8
+                        else if(combo.currentIndex===1)
+                            myPath.strokeWidth=4
+
+                        mymodel.lvlgame = myPath.strokeWidth
+
+                        //                        console.log("index",currentIndex)
+                        //                        console.log("tickness",myPath.strokeWidth)
                     }
                 }
 
             }
         }
 
-        RoundButton
-        {
-            id: startkey
-            height: 50
-            width: 50
-            radius: 50
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.topMargin: 285
-            anchors.leftMargin: -20
-            z:10
-
-            background: Rectangle{
-                color: "green"
-                radius: startkey.radius
-
-            }
-            contentItem: Text {
-                text: "start"
-                color: "white"
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            onClicked:
-            {
-                if(combo.currentIndex===0)
-                    shapeone.makeline(0)
-                else
-                    shapeone.makeline(1)
-
-
-                console.log("start" , shapeone.xy)
-                myPath.pathElements = createPathLineElements(myPath)
-                shapecontainer.visible = true
-            }
-        }
 
         Rectangle
         {
             id:shapecontainer
             visible: false
             anchors.top: clientdata.bottom
-            anchors.topMargin: 5
-            height: 345
+            anchors.topMargin: 6
+            height: 410
             width: maincontainer.width
 
             MouseArea
@@ -157,50 +223,15 @@ Window {
                 id : mousearea
                 hoverEnabled: false
                 anchors.fill: parent
-                onMouseXChanged:
+                onPositionChanged:
                 {
-                    var isonline = mymodel.isonline(mouseX,mouseY)
-                    //                    var dist = shapeone.distances
-                    console.log(isonline)
-                    //                    console.log(dist)
-                    console.log(mouseX)
-                    console.log(mouseY)
+                    mymodel.isonline(mouseX,mouseY)
+                    console.log(Date.now())
                 }
+
 
             }
 
-
-            RoundButton
-            {
-                id: endkey
-                visible: true
-                height: 50
-                width: 50
-                radius: 50
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.topMargin: 172.5
-                anchors.rightMargin: -20
-                z:1
-
-                background: Rectangle{
-                    color: "green"
-                    radius: endkey.radius
-
-                }
-                contentItem: Text {
-                    text: "end"
-                    color: "white"
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                onClicked:
-                {
-
-                }
-            }
-            //            Myshapes{}
             Shape {
                 id:shapes
                 antialiasing: enabled
@@ -208,37 +239,58 @@ Window {
 
                 ShapePath {
                     id: myPath
-
-                    strokeColor: "red"
-                    strokeWidth: 4
+                    strokeColor: "#00A1F2"
                     fillColor: "transparent"
 
                     startX: 0
                     startY: 200
-
-                    //                    property bool runCreatePathLineElements: false
-
-                    //                    onRunCreatePathLineElementsChanged: {
-                    //                        if (startkey.pressed) {
-                    //                            pathElements = shapes.createPathLineElements(myPath)
-                    //                        }
-                    //                    }
-                    //                    onPathElementsChanged:
-                    //                    {
-                    //                        if(checkit)
-                    //                        return shapes.createPathLineElements(myPath)
-                    //                    }
-
-                    //                    pathElements:
-                    //                    {
-                    //                        if(checkit)
-                    //                        return shapes.createPathLineElements(myPath)
-                    //                    }
-
-
                 }
             }
+
+            //            Item
+            //            {
+            //                id:footer
+            //                z:10
+            //                width: 100
+            //                height: 100
+            //                anchors.leftMargin:200
+            //                anchors.bottom: parent.bottom
+            //                anchors.left: parent.left
+
+
+            //    //            anchors.centerIn: parent
+            //                Shape
+            //                {
+
+
+            //    //                anchors.bottom: footer.bottom
+            //                    anchors.centerIn: footer
+            //                    ShapePath{
+
+            //                        fillColor: "black"
+            //                        strokeColor: "black"
+            //                        strokeWidth: 3
+
+            //                        PathSvg {
+
+            //                            path: "M754.053,41.894V-23.854c0-4.466-2.39-6.72-7.148-6.72H-142.5c-4.735,0-7.148,2.233-7.148,6.72V41.894ZM-147.2,39.615v-63.3c0-2.255,2.429-4.157,4.705-4.157H746.769c2.253,0,4.979,1.9,4.979,4.157v63.3Z"
+            //                        }
+            //                    }
+            //                }
+            //            }
+
+            Rectangle {
+                id:footer
+                width: parent.width
+                height: 90
+                color: "#136597"
+
+                anchors.bottom:parent.bottom
+            }
         }
+
+
     }
+
 }
 

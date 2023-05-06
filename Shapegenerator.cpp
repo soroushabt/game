@@ -20,7 +20,7 @@ void Shapegenerator::setxy(const QVector<int> &newXy)
     emit xyChanged();
 }
 
-QVector<int> Shapegenerator::makeline(levelgame a)
+QVector<int> Shapegenerator::makeline()
 {
     std::srand(time(NULL));
     QVector<int> temp;
@@ -43,10 +43,7 @@ QVector<int> Shapegenerator::makeline(levelgame a)
                 randy=200;
                 temp.append(randy);
             }
-            if(a==levelgame::easy)
-                randy=rand()%150;
-            else if(a==levelgame::hard)
-                randy=rand()%300;
+            randy=rand()%300;
 
             temp.append(randy);
         }
