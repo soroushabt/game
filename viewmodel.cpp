@@ -10,6 +10,7 @@ viewmodel::viewmodel(std::shared_ptr<Shapes> helix, DataSender* sender)
 
 {
     connect(m_sender,&DataSender::currentStatusChanged,this,&viewmodel::currentstautsChanged);
+    m_helix->callbackmethod(std::bind(&viewmodel::setdatamindist,this));
 }
 
 bool viewmodel::isonline(double xmouse, double ymouse)
@@ -22,9 +23,14 @@ void viewmodel::sendname()
 
 }
 
-void viewmodel::send(QString time)
+void viewmodel::setdatamindist()
 {
-    QMetaObject::invokeMethod(m_sender, "send", Q_ARG(QString, time));
+    setMindsit(m_helix->mindist());
+}
+
+void viewmodel::send(long time)
+{
+    QMetaObject::invokeMethod(m_sender, "send", Q_ARG(long, time));
 }
 
 
@@ -59,14 +65,6 @@ QString viewmodel::currentstauts() const
 }
 
 
-void viewmodel::setCurrentstauts(const QString &newCurrentstauts)
-{
-    if (m_currentstauts == newCurrentstauts)
-        return;
-    m_currentstauts = newCurrentstauts;
-    emit currentstautsChanged();
-}
-
 QString viewmodel::myname() const
 {
     return m_myname;
@@ -78,4 +76,17 @@ void viewmodel::setMyname(const QString &newMyname)
         return;
     m_myname = newMyname;
     emit mynameChanged();
+}
+
+double viewmodel::mindsit() const
+{
+    return m_mindsit;
+}
+
+void viewmodel::setMindsit(double newMindsit)
+{
+    if (qFuzzyCompare(m_mindsit, newMindsit))
+        return;
+    m_mindsit = newMindsit;
+    emit mindsitChanged();
 }

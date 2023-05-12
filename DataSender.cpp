@@ -10,10 +10,20 @@ DataSender::DataSender(QTcpSocket *tcpSocket , std::shared_ptr<Shapes> myshape )
     QObject::connect(m_tcpSocket, &QTcpSocket::connected, this, &DataSender::handleConnected);
 }
 
-void DataSender::send(QString time)
+void DataSender::send(long time)
 {
-    auto distances = m_shape->mindist();
-//    m_tcpSocket->write(data.toLocal8Bit());
+//    std::cerr << "start to write " << std::endl;
+    double value = m_shape->mindist();
+    int precision = 2;
+    data.append(QString::number(value, 'f', 2));
+    data.append(',');
+    data.append(QString::number(time));
+    data.append('$');
+    m_tcpSocket->write(data.toLocal8Bit());
+    qDebug() << "datasend" <<  data;
+    data.clear();
+//    m_tcpSocket->flush();
+//    m_tcpSocket->waitForBytesWritten();
 }
 
 void DataSender::sendname()

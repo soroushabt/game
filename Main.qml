@@ -12,16 +12,17 @@ Window {
     property Viewmodel mymodel: mainviewmodel
     property Shapegenerator shapeone: Shapgenratorcontext
 
-    Button
-    {
-        anchors.centerIn: parent
-        text: "click"
-        onClicked:
-        {
-            console.log(mymodel.myname)
+    //    Button
+    //    {
+    //        anchors.centerIn: parent
+    //        text: "click"
+    //        z:10
+    //        onClicked:
+    //        {
+    //            console.log(mymodel.mindsit)
 
-        }
-    }
+    //        }
+    //    }
 
     function createPathLineElements(shapePath)
     {
@@ -103,6 +104,7 @@ Window {
             shapecontainer.visible = true
             combo.enabled = false
             mymodel.sendname()
+            //            startkey.enabled = false;
         }
     }
 
@@ -212,10 +214,10 @@ Window {
         Rectangle
         {
             id:shapecontainer
-            visible: false
+            visible: true
             anchors.top: clientdata.bottom
             anchors.topMargin: 6
-            height: 410
+            height: 400
             width: maincontainer.width
 
             MouseArea
@@ -226,7 +228,7 @@ Window {
                 onPositionChanged:
                 {
                     mymodel.isonline(mouseX,mouseY)
-                    console.log(Date.now())
+                    mymodel.send(Date.now())
                 }
 
 
@@ -235,7 +237,7 @@ Window {
             Shape {
                 id:shapes
                 antialiasing: enabled
-                enabled: false
+                //                enabled: false
 
                 ShapePath {
                     id: myPath
@@ -282,15 +284,32 @@ Window {
             Rectangle {
                 id:footer
                 width: parent.width
-                height: 90
+                height: 100
                 color: "#136597"
-
+                RowLayout{
+                    spacing: 100
+                    anchors.centerIn: parent
+                    Rectangle{
+                        height: 100
+                        width: parent.width
+                        color:"transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: mymodel.mindsit
+                            font.pixelSize: 37
+                            color: "white"
+                        }
+                    }
+                }
                 anchors.bottom:parent.bottom
             }
+
         }
-
-
     }
-
 }
+
+
+
+
 

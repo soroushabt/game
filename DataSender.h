@@ -13,7 +13,6 @@ class DataSender : public QObject
     Q_PROPERTY(QString currentStatus READ currentStatus WRITE setCurrentStatus NOTIFY currentStatusChanged)
 public:
     DataSender(QTcpSocket *tcpSocket, std::shared_ptr<Shapes> myshape);
-    void send(QString time);
     void sendname();
 
     bool isConnected() const;
@@ -26,6 +25,7 @@ public:
 
 public slots:
     void connect();
+    void send(long time);
     void handleConnected();
 signals:
     void currentStatusChanged();
@@ -36,6 +36,7 @@ private:
     bool    m_isConnected =false;
     QString m_currentStatus;
     QString m_name;
+    QString data;
 };
 
 #endif // DATASENDER_H
