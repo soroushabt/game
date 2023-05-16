@@ -6,6 +6,7 @@
 
 Shapes::Shapes(Shapegenerator* data)
     :m_data(data)
+    ,m_mindist(0)
 {
 }
 double Shapes::mindist() const

@@ -7,6 +7,7 @@ viewmodel::viewmodel(std::shared_ptr<Shapes> helix, DataSender* sender)
     :m_helix(helix)
     ,m_sender(sender)
     ,m_lvlgame(0)
+    ,m_mindsit(0)
 
 {
     connect(m_sender,&DataSender::currentStatusChanged,this,&viewmodel::currentstautsChanged);
@@ -18,9 +19,9 @@ bool viewmodel::isonline(double xmouse, double ymouse)
     return m_helix->isonline(xmouse,ymouse,m_lvlgame);
 }
 
-void viewmodel::sendname()
+void viewmodel::sendname(QString name , QString family)
 {
-
+    QMetaObject::invokeMethod(m_sender, "sendname", Q_ARG(QString, name) ,Q_ARG(QString, family));
 }
 
 void viewmodel::setdatamindist()
@@ -32,7 +33,6 @@ void viewmodel::send(long time)
 {
     QMetaObject::invokeMethod(m_sender, "send", Q_ARG(long, time));
 }
-
 
 std::shared_ptr<Shapes> viewmodel::helix() const
 {
@@ -89,4 +89,18 @@ void viewmodel::setMindsit(double newMindsit)
         return;
     m_mindsit = newMindsit;
     emit mindsitChanged();
+}
+
+
+QString viewmodel::myfamily() const
+{
+    return m_myfamily;
+}
+
+void viewmodel::setMyfamily(const QString &newMyfamily)
+{
+    if (m_myfamily == newMyfamily)
+        return;
+    m_myfamily = newMyfamily;
+    emit myfamilyChanged();
 }

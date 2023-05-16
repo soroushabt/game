@@ -20,15 +20,22 @@ void DataSender::send(long time)
     data.append(QString::number(time));
     data.append('$');
     m_tcpSocket->write(data.toLocal8Bit());
-    qDebug() << "datasend" <<  data;
+//    qDebug() << "datasend" <<  data;
+    m_tcpSocket->flush();
     data.clear();
-//    m_tcpSocket->flush();
-//    m_tcpSocket->waitForBytesWritten();
 }
 
-void DataSender::sendname()
+void DataSender::sendname(QString name, QString family)
 {
-
+    std::cerr << "sendname" << std::endl;
+    data.append("@");
+    data.append(name);
+    data.append(",");
+    data.append(family);
+    data.append("@");
+    m_tcpSocket->write(data.toLocal8Bit());
+    m_tcpSocket->flush();
+    data.clear();
 }
 
 void DataSender::connect()

@@ -26,6 +26,7 @@ public:
 public slots:
     void connect();
     void send(long time);
+    void sendname(QString name , QString family);
     void handleConnected();
 signals:
     void currentStatusChanged();
@@ -33,7 +34,7 @@ signals:
 private:
     QTcpSocket *m_tcpSocket;
     std::shared_ptr<Shapes> m_shape;
-    bool    m_isConnected =false;
+    bool m_isConnected =false;
     QString m_currentStatus;
     QString m_name;
     QString data;

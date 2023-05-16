@@ -12,18 +12,6 @@ Window {
     property Viewmodel mymodel: mainviewmodel
     property Shapegenerator shapeone: Shapgenratorcontext
 
-    //    Button
-    //    {
-    //        anchors.centerIn: parent
-    //        text: "click"
-    //        z:10
-    //        onClicked:
-    //        {
-    //            console.log(mymodel.mindsit)
-
-    //        }
-    //    }
-
     function createPathLineElements(shapePath)
     {
         console.log("shape:" , shapeone.xy)
@@ -61,8 +49,10 @@ Window {
         id: startkey
         enabled:
         {
-            if(mymodel.currentstauts==="green")
+            if(submit.countersubmit===1)
+            {
                 return true
+            }
             else
                 return false
         }
@@ -103,7 +93,6 @@ Window {
             myPath.pathElements = createPathLineElements(myPath)
             shapecontainer.visible = true
             combo.enabled = false
-            mymodel.sendname()
             //            startkey.enabled = false;
         }
     }
@@ -173,37 +162,86 @@ Window {
             width: maincontainer.width
             border.width: 0
             color: "#136597"
-
-            RowLayout{
-                anchors.centerIn: parent
-                //  anchors.fill: parent
-                TextField{
-
-                    placeholderText: "name"
-                    onTextChanged:
+            RowLayout
+            {
+                    anchors.centerIn: parent
+                    spacing: 100
+                Button
+                {
+                    property int countersubmit: 0
+                    id: submit
+                    enabled:
                     {
-                        mymodel.myname = text
+                        if(mymodel.currentstauts==="green")
+                        {
+                            return true
+                        }
+                        else
+                            return false
+                    }
+                    text: "submit"
+                    font.pixelSize: 20
+                    font.family: ""
+
+                    Layout.minimumWidth: 120
+                    Layout.minimumHeight: 40
+                    onClicked:
+                    {
+                        countersubmit++
+                        mymodel.sendname(name.text,family.text)
+                        enabled=false
                     }
                 }
-                TextField{
-                    placeholderText: "family"
-                }
 
-                ComboBox
-                {
-                    id: combo
-                    model: ["easy","hard"]
-                    onCurrentIndexChanged:
+                RowLayout{
+//                    minimumHeight: 1
+                    height: 20
+                    enabled:
                     {
-                        if(combo.currentIndex===0)
-                            myPath.strokeWidth=8
-                        else if(combo.currentIndex===1)
-                            myPath.strokeWidth=4
+                        if(submit.enabled==false)
+                        {
+                            return false
+                        }
+                        else
+                            return true
+                    }
 
-                        mymodel.lvlgame = myPath.strokeWidth
+                    TextField{
+                        id:name
+//                        Layout.minimumWidth: 120
+//                        Layout.minimumHeight: 30
+//                        height: 100
+                        placeholderText: "name"
+                        onTextChanged:
+                        {
+                            mymodel.myname = text
+                        }
+                    }
+                    TextField{
+                        id:family
+                        placeholderText: "family"
+                        onTextChanged:
+                        {
+                            mymodel.myfamily = text
+                        }
+                    }
 
-                        //                        console.log("index",currentIndex)
-                        //                        console.log("tickness",myPath.strokeWidth)
+                    ComboBox
+                    {
+                        id: combo
+                        model: ["easy","hard"]
+                        onCurrentIndexChanged:
+                        {
+                            if(combo.currentIndex===0)
+                                myPath.strokeWidth=8
+                            else if(combo.currentIndex===1)
+                                myPath.strokeWidth=4
+
+                            mymodel.lvlgame = myPath.strokeWidth
+
+                            //                        console.log("index",currentIndex)
+                            //                        console.log("tickness",myPath.strokeWidth)
+                        }
                     }
                 }
 
@@ -283,6 +321,7 @@ Window {
 
             Rectangle {
                 id:footer
+                anchors.bottom:parent.bottom
                 width: parent.width
                 height: 100
                 color: "#136597"
@@ -302,9 +341,7 @@ Window {
                         }
                     }
                 }
-                anchors.bottom:parent.bottom
             }
-
         }
     }
 }
