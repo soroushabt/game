@@ -24,6 +24,11 @@ void viewmodel::sendname(QString name , QString family)
     QMetaObject::invokeMethod(m_sender, "sendname", Q_ARG(QString, name) ,Q_ARG(QString, family));
 }
 
+void viewmodel::sendfinish()
+{
+    QMetaObject::invokeMethod(m_sender, "sendfinish");
+}
+
 void viewmodel::setdatamindist()
 {
     setMindsit(m_helix->mindist());

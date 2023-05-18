@@ -120,8 +120,12 @@ Window {
             color: "white"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-
-
+        }
+        onClicked:
+        {
+            mymodel.sendfinish()
+            submit.enabled = true
+            submit.countersubmit=0
         }
 
     }

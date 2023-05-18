@@ -24,6 +24,7 @@ public:
     Q_INVOKABLE bool isonline(double xmouse, double ymouse);
     Q_INVOKABLE void send(long time);
     Q_INVOKABLE void sendname(QString name , QString family);
+    Q_INVOKABLE void sendfinish();
     void setdatamindist();
 
     std::shared_ptr<Shapes> helix() const;

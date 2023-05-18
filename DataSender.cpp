@@ -27,12 +27,19 @@ void DataSender::send(long time)
 
 void DataSender::sendname(QString name, QString family)
 {
-    std::cerr << "sendname" << std::endl;
     data.append("@");
     data.append(name);
     data.append(",");
     data.append(family);
     data.append("@");
+    m_tcpSocket->write(data.toLocal8Bit());
+    m_tcpSocket->flush();
+    data.clear();
+}
+
+void DataSender::sendfinish()
+{
+    data.append("*");
     m_tcpSocket->write(data.toLocal8Bit());
     m_tcpSocket->flush();
     data.clear();

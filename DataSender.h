@@ -27,6 +27,7 @@ public slots:
     void connect();
     void send(long time);
     void sendname(QString name , QString family);
+    void sendfinish();
     void handleConnected();
 signals:
     void currentStatusChanged();
