@@ -12,6 +12,19 @@ Window {
     property Viewmodel mymodel: mainviewmodel
     property Shapegenerator shapeone: Shapgenratorcontext
 
+    Button
+    {
+        anchors.top: parent.top
+        //        color:"red"
+        height: 10
+        width: 20
+        onClicked:
+        {
+//            console.log(submit.countersubmit)
+        }
+        z:10
+    }
+
     function createPathLineElements(shapePath)
     {
         console.log("shape:" , shapeone.xy)
@@ -19,8 +32,6 @@ Window {
         var pathElements = []
         for (var i = 0; i < 14; i++)
         {
-            var even = 2*i
-            var odd  = 2*i+1
             var pathLine = Qt.createQmlObject('import QtQuick 2.15; PathLine {}',
                                               shapePath);
             var PathArc = Qt.createQmlObject('import QtQuick 2.15; PathArc {}',
@@ -47,16 +58,7 @@ Window {
     RoundButton
     {
         id: startkey
-        enabled:
-        {
-            if(submit.countersubmit===1)
-            {
-                return true
-            }
-            else
-                return false
-        }
-
+        enabled: false
         height: 50
         width: 50
         radius: 50
@@ -124,8 +126,8 @@ Window {
         onClicked:
         {
             mymodel.sendfinish()
+            shapecontainer.visible = false
             submit.enabled = true
-            submit.countersubmit=0
         }
 
     }
@@ -172,7 +174,6 @@ Window {
                     spacing: 100
                 Button
                 {
-                    property int countersubmit: 0
                     id: submit
                     enabled:
                     {
@@ -191,8 +192,8 @@ Window {
                     Layout.minimumHeight: 40
                     onClicked:
                     {
-                        countersubmit++
                         mymodel.sendname(name.text,family.text)
+                        startkey.enabled = true
                         enabled=false
                     }
                 }
@@ -269,6 +270,7 @@ Window {
                 anchors.fill: parent
                 onPositionChanged:
                 {
+                    startkey.enabled = false
                     mymodel.isonline(mouseX,mouseY)
                     mymodel.send(Date.now())
                 }
