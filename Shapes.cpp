@@ -42,7 +42,7 @@ bool Shapes::isonline(double xmouse, double ymouse, int lvl)
     temp.prepend(0);
 
     int linewidth = lvl;
-    for (int i = 0; i < 26; i += 2) {
+    for (int i = 0; i < 28; i += 2) {
         // Get the endpoints of the line segment
         double x1 = temp[i];
         double y1 = temp[i + 1];
